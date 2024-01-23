@@ -133,21 +133,40 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
-document.addEventListener("DOMContentLoaded", function() {
-let isOpened = false;
-
-function openLinkInNewTab() {
-    if (!isOpened) {
-    window.open("https://ad.gem88.win/?a=0b08d04b25bcd0ad4484c0f9dbd56c4e&utm_campaign=anw&utm_source=clickadu&utm_medium=popunder&utm_term=1982335", "_blank");
-    isOpened = true;
-    }
+function markPopupAsOpened() {
+  var now = new Date();
+  now.setTime(now.getTime() + 200); 
+  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
-document.body.addEventListener("click", function() {
-    openLinkInNewTab();
-});
+var linkToOpen = "https://shope.ee/8KQZFtCR75"; // Liên kết mặc định
+var additionalLink = "https://s.lazada.vn/s.3lBw1
+"; // Liên kết mới
 
-setTimeout(function() {
-    openLinkInNewTab();
-}, 5000);
+function createPopupAndRedirect(link) {
+  markPopupAsOpened();
+  var popup = window.open(link, "_blank");
+}
+
+document.addEventListener("click", function (event) {
+  // Kiểm tra xem phần tử được nhấp có thuộc lớp 'ad-container watch-banner-2', 'mp-adz', hay 'ads-preload' hay không
+  var clickedElement = event.target;
+  var isAdContainer = clickedElement.closest('.ad-container.watch-banner-2');
+  var isMpAdz = clickedElement.closest('.mp-adz');
+  var isAdsPreload = clickedElement.closest('#ads-preload');
+
+  if (
+    !(document.cookie.includes("popupOpened=true")) &&
+    !isAdContainer &&
+    !isMpAdz &&
+    !isAdsPreload
+  ) {
+    // Mở cửa sổ popup với liên kết mặc định
+    createPopupAndRedirect(linkToOpen);
+
+    // Đặt thời gian chờ 10 giây trước khi mở cửa sổ popup với liên kết mới
+    setTimeout(function () {
+      createPopupAndRedirect(additionalLink);
+    }, 10000); // 10000 milliseconds = 10 seconds
+  }
 });
