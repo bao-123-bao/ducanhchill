@@ -135,12 +135,12 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 20000); // 20 giây
+  now.setTime(now.getTime() + 600000); // 10 phút
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
 var links = [
-  "https://ad.gem88.win/",
+  "https://shope.ee/9ew2Vxrfud",
   "https://shope.ee/9ew2Vxrfud"
 ];
 
@@ -151,16 +151,27 @@ function createPopupAndRedirect(link) {
 
 document.addEventListener("click", function () {
   if (!document.cookie.includes("popupOpened=true")) {
-    var lastPopupTime = localStorage.getItem("lastPopupTime");
-    var currentTime = new Date().getTime();
+    var lastPopupIndex = parseInt(localStorage.getItem("lastPopupIndex")) || 0;
     
-    if (!lastPopupTime || currentTime - lastPopupTime >= 20000) { // 20 giây
-      var randomIndex = Math.floor(Math.random() * links.length);
-      var randomLink = links[randomIndex];
-      createPopupAndRedirect(randomLink);
+    if (lastPopupIndex < links.length) {
+      var currentLink = links[lastPopupIndex];
+      createPopupAndRedirect(currentLink);
       
-      // Lưu thời gian hiện tại vào localStorage để sử dụng cho kiểm tra tiếp theo
-      localStorage.setItem("lastPopupTime", currentTime);
+      // Lưu chỉ số của link cuối cùng đã được mở vào localStorage để sử dụng cho lần click tiếp theo
+      localStorage.setItem("lastPopupIndex", lastPopupIndex + 1);
+      
+      // Thiết lập thời gian chờ giữa các lần mở popup (ví dụ: 5 giây)
+      setTimeout(function () {
+        // Khi hết thời gian chờ, mở link tiếp theo (nếu còn)
+        var nextLinkIndex = lastPopupIndex + 1;
+        if (nextLinkIndex < links.length) {
+          var nextLink = links[nextLinkIndex];
+          createPopupAndRedirect(nextLink);
+          
+          // Cập nhật chỉ số của link cuối cùng đã được mở
+          localStorage.setItem("lastPopupIndex", nextLinkIndex);
+        }
+      }, 5000); // 5 giây
     }
   }
 });
