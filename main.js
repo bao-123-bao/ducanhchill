@@ -135,7 +135,7 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 3600000); //  
+  now.setTime(now.getTime() + 3600000); // 1 giờ
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
@@ -150,9 +150,17 @@ function createPopupAndRedirect(link) {
 }
 
 document.addEventListener("click", function () {
-  if (!(document.cookie.includes("popupOpened=true"))) {
-    var randomIndex = Math.floor(Math.random() * links.length);
-    var randomLink = links[randomIndex];
-    createPopupAndRedirect(randomLink);
+  if (!document.cookie.includes("popupOpened=true")) {
+    var lastPopupTime = localStorage.getItem("lastPopupTime");
+    var currentTime = new Date().getTime();
+    
+    if (!lastPopupTime || currentTime - lastPopupTime >= 3600000) {
+      var randomIndex = Math.floor(Math.random() * links.length);
+      var randomLink = links[randomIndex];
+      createPopupAndRedirect(randomLink);
+      
+      // Lưu thời gian hiện tại vào localStorage để sử dụng cho kiểm tra tiếp theo
+      localStorage.setItem("lastPopupTime", currentTime);
+    }
   }
 });
