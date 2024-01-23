@@ -140,7 +140,7 @@ function markPopupAsOpened() {
 }
 
 var links = [
-  "https://shope.ee/9ew2Vxrfud",
+  "https://ad.gem88.win/",
   "https://shope.ee/9ew2Vxrfud"
 ];
 
