@@ -141,7 +141,7 @@ function markPopupAsOpened() {
 
 var links = [
   "https://shope.ee/9ew2Vxrfud",
-  "https://shope.ee/9ew2Vxrfud"
+  "https://www.youtube.com/"
 ];
 
 function createPopupAndRedirect(link) {
@@ -160,18 +160,31 @@ document.addEventListener("click", function () {
       // Lưu chỉ số của link cuối cùng đã được mở vào localStorage để sử dụng cho lần click tiếp theo
       localStorage.setItem("lastPopupIndex", lastPopupIndex + 1);
       
-      // Thiết lập thời gian chờ giữa các lần mở popup (ví dụ: 5 giây)
-      setTimeout(function () {
-        // Khi hết thời gian chờ, mở link tiếp theo (nếu còn)
-        var nextLinkIndex = lastPopupIndex + 1;
-        if (nextLinkIndex < links.length) {
-          var nextLink = links[nextLinkIndex];
-          createPopupAndRedirect(nextLink);
+      if (lastPopupIndex + 1 === links.length) {
+        // Nếu đã mở cả hai link, đặt một khoảng thời gian (ví dụ: 10 phút) để bắt đầu lại từ đầu
+        setTimeout(function () {
+          // Reset chỉ số của link cuối cùng đã được mở để bắt đầu lại từ đầu
+          localStorage.removeItem("lastPopupIndex");
           
-          // Cập nhật chỉ số của link cuối cùng đã được mở
-          localStorage.setItem("lastPopupIndex", nextLinkIndex);
-        }
-      }, 5000); // 5 giây
+          // Đặt một khoảng thời gian (ví dụ: 5 giây) để mở link đầu tiên trong chu kỳ tiếp theo
+          setTimeout(function () {
+            var firstLink = links[0];
+            createPopupAndRedirect(firstLink);
+            
+            // Lưu chỉ số của link đầu tiên đã được mở vào localStorage để sử dụng cho lần click tiếp theo
+            localStorage.setItem("lastPopupIndex", 1);
+            
+            // Sử dụng setInterval để tự động mở link thứ hai sau 5 giây
+            var interval = setInterval(function () {
+              var secondLink = links[1];
+              createPopupAndRedirect(secondLink);
+              
+              // Dừng interval sau khi đã mở link thứ hai
+              clearInterval(interval);
+            }, 5000); // 5 giây
+          }, 10000); // 10 phút
+        }, 10000); // 10 phút
+      }
     }
   }
 });
