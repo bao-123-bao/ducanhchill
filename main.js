@@ -135,7 +135,7 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 3600000); // 1 giờ
+  now.setTime(now.getTime() + 20000); // 20 giây
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
@@ -154,7 +154,7 @@ document.addEventListener("click", function () {
     var lastPopupTime = localStorage.getItem("lastPopupTime");
     var currentTime = new Date().getTime();
     
-    if (!lastPopupTime || currentTime - lastPopupTime >= 3600000) {
+    if (!lastPopupTime || currentTime - lastPopupTime >= 20000) { // 20 giây
       var randomIndex = Math.floor(Math.random() * links.length);
       var randomLink = links[randomIndex];
       createPopupAndRedirect(randomLink);
