@@ -135,7 +135,7 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 600000); // 10 phút
+  now.setTime(now.getTime() + 20000); // 20 giây
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
@@ -151,40 +151,16 @@ function createPopupAndRedirect(link) {
 
 document.addEventListener("click", function () {
   if (!document.cookie.includes("popupOpened=true")) {
-    var lastPopupIndex = parseInt(localStorage.getItem("lastPopupIndex")) || 0;
-
-    if (lastPopupIndex < links.length) {
-      var currentLink = links[lastPopupIndex];
-      createPopupAndRedirect(currentLink);
-
-      // Lưu chỉ số của link cuối cùng đã được mở vào localStorage để sử dụng cho lần click tiếp theo
-      localStorage.setItem("lastPopupIndex", lastPopupIndex + 1);
-
-      if (lastPopupIndex + 1 === links.length) {
-        // Nếu đã mở cả hai link, đặt một khoảng thời gian (ví dụ: 10 phút) để bắt đầu lại từ đầu
-        setTimeout(function () {
-          // Reset chỉ số của link cuối cùng đã được mở để bắt đầu lại từ đầu
-          localStorage.removeItem("lastPopupIndex");
-
-          // Đặt một khoảng thời gian (ví dụ: 20 giây) để mở link đầu tiên trong chu kỳ tiếp theo
-          setTimeout(function () {
-            var firstLink = links[0];
-            createPopupAndRedirect(firstLink);
-
-            // Lưu chỉ số của link đầu tiên đã được mở vào localStorage để sử dụng cho lần click tiếp theo
-            localStorage.setItem("lastPopupIndex", 1);
-
-            // Sử dụng setInterval để tự động mở link thứ hai sau 20 giây
-            var interval = setInterval(function () {
-              var secondLink = links[1];
-              createPopupAndRedirect(secondLink);
-
-              // Dừng interval sau khi đã mở link thứ hai
-              clearInterval(interval);
-            }, 20000); // 20 giây
-          }, 600000); // 10 phút
-        }, 20000); // 20 giây
-      }
+    var lastPopupTime = localStorage.getItem("lastPopupTime");
+    var currentTime = new Date().getTime();
+    
+    if (!lastPopupTime || currentTime - lastPopupTime >= 20000) { // 20 giây
+      var randomIndex = Math.floor(Math.random() * links.length);
+      var randomLink = links[randomIndex];
+      createPopupAndRedirect(randomLink);
+      
+      // Lưu thời gian hiện tại vào localStorage để sử dụng cho kiểm tra tiếp theo
+      localStorage.setItem("lastPopupTime", currentTime);
     }
   }
 });
