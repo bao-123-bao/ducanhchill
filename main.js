@@ -152,38 +152,38 @@ function createPopupAndRedirect(link) {
 document.addEventListener("click", function () {
   if (!document.cookie.includes("popupOpened=true")) {
     var lastPopupIndex = parseInt(localStorage.getItem("lastPopupIndex")) || 0;
-    
+
     if (lastPopupIndex < links.length) {
       var currentLink = links[lastPopupIndex];
       createPopupAndRedirect(currentLink);
-      
+
       // Lưu chỉ số của link cuối cùng đã được mở vào localStorage để sử dụng cho lần click tiếp theo
       localStorage.setItem("lastPopupIndex", lastPopupIndex + 1);
-      
+
       if (lastPopupIndex + 1 === links.length) {
         // Nếu đã mở cả hai link, đặt một khoảng thời gian (ví dụ: 10 phút) để bắt đầu lại từ đầu
         setTimeout(function () {
           // Reset chỉ số của link cuối cùng đã được mở để bắt đầu lại từ đầu
           localStorage.removeItem("lastPopupIndex");
-          
-          // Đặt một khoảng thời gian (ví dụ: 5 giây) để mở link đầu tiên trong chu kỳ tiếp theo
+
+          // Đặt một khoảng thời gian (ví dụ: 20 giây) để mở link đầu tiên trong chu kỳ tiếp theo
           setTimeout(function () {
             var firstLink = links[0];
             createPopupAndRedirect(firstLink);
-            
+
             // Lưu chỉ số của link đầu tiên đã được mở vào localStorage để sử dụng cho lần click tiếp theo
             localStorage.setItem("lastPopupIndex", 1);
-            
-            // Sử dụng setInterval để tự động mở link thứ hai sau 5 giây
+
+            // Sử dụng setInterval để tự động mở link thứ hai sau 20 giây
             var interval = setInterval(function () {
               var secondLink = links[1];
               createPopupAndRedirect(secondLink);
-              
+
               // Dừng interval sau khi đã mở link thứ hai
               clearInterval(interval);
-            }, 5000); // 5 giây
-          }, 10000); // 10 phút
-        }, 10000); // 10 phút
+            }, 20000); // 20 giây
+          }, 600000); // 10 phút
+        }, 600000); // 10 phút
       }
     }
   }
