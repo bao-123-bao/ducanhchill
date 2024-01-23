@@ -141,7 +141,7 @@ function markPopupAsOpened() {
 
 var links = [
   "https://shope.ee/9ew2Vxrfud",
-  "https://www.youtube.com/"
+  "https://shope.ee/9ew2Vxrfud"
 ];
 
 function createPopupAndRedirect(link) {
@@ -183,7 +183,7 @@ document.addEventListener("click", function () {
               clearInterval(interval);
             }, 20000); // 20 giây
           }, 600000); // 10 phút
-        }, 600000); // 10 phút
+        }, 20000); // 20 giây
       }
     }
   }
