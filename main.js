@@ -133,31 +133,37 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
-function Set_Cookie(a, b, c, e, f, g) {
-var d = new Date();
-d.setTime(d.getTime() + (c*60*1000));
-document.cookie = a + '=' + escape(b) + (c ? ';expires=' + d.toGMTString() : '') + (e ? ';path=' + e : '') + (f ? ';domain=' + f : '') + (g ? ';secure' : '')
+var popupLinks = [
+  "https://shope.ee/9UcU0eCe3A",
+  "https://s.lazada.vn/s.3lBw1"
+];
+
+var currentIndex = 0;
+
+function markPopupAsOpened() {
+  var now = new Date();
+  now.setTime(now.getTime() + 600000); // 10 phút
+  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
-function Get_Cookie(a) {
-var b = document.cookie.indexOf(a + '='),
-c = b + a.length + 1;
-if (!b && a != document.cookie.substring(0, a.length) || -1 == b) return null;
-a = document.cookie.indexOf(';', c); - 1 == a && (a = document.cookie.length);
-return unescape(document.cookie.substring(c, a))
+
+function createPopupAndRedirect(link) {
+  markPopupAsOpened();
+  var popup = window.open(link, "_blank");
 }
-function Delete_Cookie(a, b, c) {
-Get_Cookie(a) && (document.cookie = a + '=' + (b ? ';path=' + b : '') + (c ? ';domain=' + c : '') + ';expires=Mon, 11-November-2020 00:00:01 GMT')
+
+function openNextPopup() {
+  if (currentIndex < popupLinks.length) {
+    var currentLink = popupLinks[currentIndex];
+    createPopupAndRedirect(currentLink);
+    currentIndex++;
+
+    // Đặt thời gian chờ giữa các popup (ví dụ: 20 giây)
+    setTimeout(openNextPopup, 20000);
+  }
 }
-function popunder() {
-if (Get_Cookie('popupgo88') == null) {
-Set_Cookie('popupgo88', 'pop_go88', '60', '/', '', '');
-var url = "https://shope.ee/9UcU0eCe3A";
-pop = window.open(url, 'windowcucre');
-pop.blur();
-window.focus();
-}}
-function addEvent(obj, eventName, func) {
-if (obj.attachEvent) {
-obj.attachEvent("on" + eventName, func);
-}
-else if (obj.addEventListener) {
+
+document.addEventListener("click", function () {
+  if (!document.cookie.includes("popupOpened=true")) {
+    openNextPopup();
+  }
+});
