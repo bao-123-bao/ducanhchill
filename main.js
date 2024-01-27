@@ -137,7 +137,7 @@ var isPopupOpen = false;
 
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 200); // 0.2 giây
+  now.setTime(now.getTime() + 600000); // 10 phút
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
@@ -170,10 +170,10 @@ document.addEventListener("click", function (event) {
     // Mở cửa sổ popup với liên kết mặc định
     createPopupAndRedirect(linkToOpen);
 
-    // Đặt thời gian chờ 10 giây trước khi mở cửa sổ popup với liên kết mới
+    // Đặt thời gian chờ 10 phút trước khi mở cửa sổ popup với liên kết mới
     setTimeout(function () {
       isPopupOpen = false; // Cho phép mở popup tiếp theo
       createPopupAndRedirect(additionalLink);
-    }, 10000); // 10000 milliseconds = 10 seconds
+    }, 600000); // 600000 milliseconds = 10 minutes
   }
 });
