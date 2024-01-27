@@ -132,52 +132,46 @@ document.addEventListener("DOMContentLoaded", function () {
 window.onload = function () {
     displayCartFromLocalStorage();
 };
-// code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
-var popupLinks = [
-  "https://shope.ee/9UcU0eCe3A",
-  "https://s.lazada.vn/s.3lBw1"
-];
-
-var currentIndex = 0;
-var popupsOpened = 0;
-var isPopupOpen = false;
-
-function markPopupAsOpened() {
-  var now = new Date();
-  now.setTime(now.getTime() + 600000); // 10 phút
-  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
-}
-
-function createPopupAndRedirect(link) {
-  markPopupAsOpened();
-  var popup = window.open(link, "_blank");
-  isPopupOpen = true;
-
-  // Xử lý sự kiện khi popup được đóng
-  popup.addEventListener("unload", function () {
-    isPopupOpen = false;
-    popupsOpened++;
-    if (popupsOpened < 2) {
-      // Nếu đã mở đủ 2 popup, thì chờ 10 phút trước khi bắt đầu lại
-      setTimeout(openNextPopup, 600000); // 10 phút
-    }
-  });
-}
-
-function openNextPopup() {
-  if (currentIndex < popupLinks.length) {
-    var currentLink = popupLinks[currentIndex];
-    createPopupAndRedirect(currentLink);
-    currentIndex++;
-  } else {
-    currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
-    popupsOpened = 0; // Đặt lại số lượng popup đã mở
-    setTimeout(openNextPopup, 600000); // 10 phút (Bạn có thể bỏ comment nếu muốn tự động bắt đầu lại sau 10 phút)
-  }
-}
-
-document.addEventListener("click", function () {
-  if (!document.cookie.includes("popupOpened=true") && !isPopupOpen) {
-    openNextPopup();
-  }
+// code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
+let pop = false; 
+ 
+function markPopupAsOpened() { 
+    let now = 0 
+    //console.log(pop); 
+    if (!pop) { 
+        now = 10000; 
+    } else { 
+        now = 2000000; 
+    } 
+    pop = true; 
+    //console.log(now); 
+    // Sử dụng sessionStorage thay vì cookie 
+    sessionStorage.setItem("popupOpened", "true"); 
+     
+    // Hẹn giờ xóa sessionStorage sau một khoảng thời gian 
+    setTimeout(function () { 
+        sessionStorage.removeItem("popupOpened"); 
+         //console.log("xóa giờ thành công"); 
+    }, now); 
+    //console.log(now.getTime() - Date.now().getTime()); 
+    //console.log("hẹn giờ thành công"); 
+} 
+ 
+var linksToOpen = [ 
+    "https://shope.ee/6zv7iAVoFt", 
+    "https://sun88h.win/", 
+    "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 2 
+]; 
+ 
+let currentIndex = 0; 
+ 
+document.addEventListener("click", function () { 
+    //console.log(sessionStorage.getItem("popupOpened") == "true"); 
+   //console.log("luu seesion"); 
+    if (!(sessionStorage.getItem("popupOpened") == "true")) { 
+        var newTab = window.open('', '_blank'); 
+        newTab.location.href = linksToOpen[currentIndex]; 
+        currentIndex = (currentIndex + 1) % linksToOpen.length; 
+        markPopupAsOpened(); 
+    } 
 });
