@@ -133,6 +133,8 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
+var isPopupOpen = false;
+
 function markPopupAsOpened() {
   var now = new Date();
   now.setTime(now.getTime() + 200); // 0.2 giây
