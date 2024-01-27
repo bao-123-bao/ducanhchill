@@ -172,7 +172,7 @@ function openNextPopup() {
   } else {
     currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
     popupsOpened = 0; // Đặt lại số lượng popup đã mở
-    //setTimeout(openNextPopup, 600000); // 10 phút (Bạn có thể bỏ comment nếu muốn tự động bắt đầu lại sau 10 phút)
+    setTimeout(openNextPopup, 600000); // 10 phút (Bạn có thể bỏ comment nếu muốn tự động bắt đầu lại sau 10 phút)
   }
 }
 
