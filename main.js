@@ -159,6 +159,12 @@ function openNextPopup() {
 
     // Đặt thời gian chờ giữa các popup (ví dụ: 20 giây)
     setTimeout(openNextPopup, 20000);
+  } else {
+    // Nếu đã mở hết các liên kết, đặt thời gian nghỉ 10 phút trước khi bắt đầu lại
+    setTimeout(function () {
+      currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
+      openNextPopup();
+    }, 600000); // 10 phút
   }
 }
 
