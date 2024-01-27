@@ -155,7 +155,7 @@ function createPopupAndRedirect(link) {
   // Xử lý sự kiện khi popup được đóng
   popup.addEventListener("unload", function () {
     isPopupOpen = false;
-    openNextPopup();
+    setTimeout(openNextPopup, 600000); // 10 phút
   });
 }
 
