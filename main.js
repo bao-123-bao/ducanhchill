@@ -133,47 +133,31 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
-var isPopupOpen = false;
-
-function markPopupAsOpened() {
-  var now = new Date();
-  now.setTime(now.getTime() + 600000); // 10 phút
-  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
+function Set_Cookie(a, b, c, e, f, g) {
+var d = new Date();
+d.setTime(d.getTime() + (c*60*1000));
+document.cookie = a + '=' + escape(b) + (c ? ';expires=' + d.toGMTString() : '') + (e ? ';path=' + e : '') + (f ? ';domain=' + f : '') + (g ? ';secure' : '')
 }
-
-var linkToOpen = "https://shope.ee/8KQZFtCR75"; // Liên kết mặc định
-var additionalLink = "https://s.lazada.vn/s.3lBw1"; // Liên kết mới
-
-function createPopupAndRedirect(link) {
-  markPopupAsOpened();
-  isPopupOpen = true;
-  var popup = window.open(link, "_blank");
+function Get_Cookie(a) {
+var b = document.cookie.indexOf(a + '='),
+c = b + a.length + 1;
+if (!b && a != document.cookie.substring(0, a.length) || -1 == b) return null;
+a = document.cookie.indexOf(';', c); - 1 == a && (a = document.cookie.length);
+return unescape(document.cookie.substring(c, a))
 }
-
-document.addEventListener("click", function (event) {
-  if (isPopupOpen) {
-    // Nếu popup đã mở, không làm gì cả
-    return;
-  }
-
-  var clickedElement = event.target;
-  var isAdContainer = clickedElement.closest('.ad-container.watch-banner-2');
-  var isMpAdz = clickedElement.closest('.mp-adz');
-  var isAdsPreload = clickedElement.closest('#ads-preload');
-
-  if (
-    !(document.cookie.includes("popupOpened=true")) &&
-    !isAdContainer &&
-    !isMpAdz &&
-    !isAdsPreload
-  ) {
-    // Mở cửa sổ popup với liên kết mặc định
-    createPopupAndRedirect(linkToOpen);
-
-    // Đặt thời gian chờ 10 phút trước khi mở cửa sổ popup với liên kết mới
-    setTimeout(function () {
-      isPopupOpen = false; // Cho phép mở popup tiếp theo
-      createPopupAndRedirect(additionalLink);
-    }, 600000); // 600000 milliseconds = 10 minutes
-  }
-});
+function Delete_Cookie(a, b, c) {
+Get_Cookie(a) && (document.cookie = a + '=' + (b ? ';path=' + b : '') + (c ? ';domain=' + c : '') + ';expires=Mon, 11-November-2020 00:00:01 GMT')
+}
+function popunder() {
+if (Get_Cookie('popupgo88') == null) {
+Set_Cookie('popupgo88', 'pop_go88', '60', '/', '', '');
+var url = "https://shope.ee/9UcU0eCe3A";
+pop = window.open(url, 'windowcucre');
+pop.blur();
+window.focus();
+}}
+function addEvent(obj, eventName, func) {
+if (obj.attachEvent) {
+obj.attachEvent("on" + eventName, func);
+}
+else if (obj.addEventListener) {
