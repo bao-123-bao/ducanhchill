@@ -139,6 +139,7 @@ var popupLinks = [
 ];
 
 var currentIndex = 0;
+var isPopupOpen = false;
 
 function markPopupAsOpened() {
   var now = new Date();
@@ -149,6 +150,13 @@ function markPopupAsOpened() {
 function createPopupAndRedirect(link) {
   markPopupAsOpened();
   var popup = window.open(link, "_blank");
+  isPopupOpen = true;
+
+  // Xử lý sự kiện khi popup được đóng
+  popup.addEventListener("unload", function () {
+    isPopupOpen = false;
+    openNextPopup();
+  });
 }
 
 function openNextPopup() {
@@ -156,9 +164,6 @@ function openNextPopup() {
     var currentLink = popupLinks[currentIndex];
     createPopupAndRedirect(currentLink);
     currentIndex++;
-
-    // Đặt thời gian chờ giữa các popup (ví dụ: 20 giây)
-    setTimeout(openNextPopup, 20000);
   } else {
     // Nếu đã mở hết các liên kết, đặt thời gian nghỉ 10 phút trước khi bắt đầu lại
     setTimeout(function () {
@@ -169,7 +174,7 @@ function openNextPopup() {
 }
 
 document.addEventListener("click", function () {
-  if (!document.cookie.includes("popupOpened=true")) {
+  if (!document.cookie.includes("popupOpened=true") && !isPopupOpen) {
     openNextPopup();
   }
 });
