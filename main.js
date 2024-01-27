@@ -135,7 +135,7 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 200000); 
+  now.setTime(now.getTime() + 200); // 0.2 giây
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
@@ -144,11 +144,16 @@ var additionalLink = "https://s.lazada.vn/s.3lBw1"; // Liên kết mới
 
 function createPopupAndRedirect(link) {
   markPopupAsOpened();
+  isPopupOpen = true;
   var popup = window.open(link, "_blank");
 }
 
 document.addEventListener("click", function (event) {
-  // Kiểm tra xem phần tử được nhấp có thuộc lớp 'ad-container watch-banner-2', 'mp-adz', hay 'ads-preload' hay không
+  if (isPopupOpen) {
+    // Nếu popup đã mở, không làm gì cả
+    return;
+  }
+
   var clickedElement = event.target;
   var isAdContainer = clickedElement.closest('.ad-container.watch-banner-2');
   var isMpAdz = clickedElement.closest('.mp-adz');
@@ -165,6 +170,7 @@ document.addEventListener("click", function (event) {
 
     // Đặt thời gian chờ 10 giây trước khi mở cửa sổ popup với liên kết mới
     setTimeout(function () {
+      isPopupOpen = false; // Cho phép mở popup tiếp theo
       createPopupAndRedirect(additionalLink);
     }, 10000); // 10000 milliseconds = 10 seconds
   }
