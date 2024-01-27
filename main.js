@@ -139,7 +139,6 @@ var popupLinks = [
 ];
 
 var currentIndex = 0;
-var isPopupOpen = false;
 
 function markPopupAsOpened() {
   var now = new Date();
@@ -150,12 +149,10 @@ function markPopupAsOpened() {
 function createPopupAndRedirect(link) {
   markPopupAsOpened();
   var popup = window.open(link, "_blank");
-  isPopupOpen = true;
 
   // Xử lý sự kiện khi popup được đóng
   popup.addEventListener("unload", function () {
-    isPopupOpen = false;
-    openNextPopup();
+    setTimeout(openNextPopup, 600000); // 10 phút
   });
 }
 
@@ -165,16 +162,13 @@ function openNextPopup() {
     createPopupAndRedirect(currentLink);
     currentIndex++;
   } else {
-    // Nếu đã mở hết các liên kết, đặt thời gian nghỉ 10 phút trước khi bắt đầu lại
-    setTimeout(function () {
-      currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
-      openNextPopup();
-    }, 600000); // 10 phút
+    currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
+    setTimeout(openNextPopup, 600000); // 10 phút
   }
 }
 
 document.addEventListener("click", function () {
-  if (!document.cookie.includes("popupOpened=true") && !isPopupOpen) {
+  if (!document.cookie.includes("popupOpened=true")) {
     openNextPopup();
   }
 });
