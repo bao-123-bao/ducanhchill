@@ -133,48 +133,42 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-let pop = false;
+function openLinksSequentially(links, delayBetweenLinks) {
+    let currentIndex = 0;
 
-function markPopupAsOpened() {
-    let now = 0;
+    function openNextLink() {
+        if (currentIndex < links.length) {
+            // Mở một tab mới và chuyển hướng đến liên kết tại chỉ số hiện tại của mảng
+            var newTab = window.open('', '_blank');
+            newTab.location.href = links[currentIndex];
 
-    // Kiểm tra giá trị của biến pop và thiết lập thời gian chờ tương ứng
-    if (!pop) {
-        now = 20000; // 20 giây nếu pop = false
-    } else {
-        now = 1200000; // 1200 giây (khoảng 20 phút) nếu pop = true
+            // Tăng chỉ số để chuyển đến liên kết tiếp theo trong lần click tiếp theo
+            currentIndex++;
+
+            // Hẹn giờ mở liên kết tiếp theo
+            setTimeout(openNextLink, delayBetweenLinks);
+        } else {
+            // Nếu đã mở hết liên kết, hẹn giờ nghỉ ngơi 20 phút trước khi bắt đầu lại
+            setTimeout(function () {
+                currentIndex = 0;
+                openNextLink();
+            }, 1200000); // 1200 giây = 20 phút
+        }
     }
 
-    pop = true;
-
-    // Sử dụng sessionStorage thay vì cookie để theo dõi việc popup đã được mở hay chưa
-    sessionStorage.setItem("popupOpened", "true");
-
-    // Hẹn giờ xóa sessionStorage sau một khoảng thời gian
-    setTimeout(function () {
-        sessionStorage.removeItem("popupOpened");
-    }, now);
+    // Bắt đầu quá trình mở liên kết
+    openNextLink();
 }
 
+// Mảng chứa các liên kết cần mở
 var linksToOpen = [
     "https://shope.ee/6zv7iAVoFt",
     "https://sun88h.win/",
     "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 3
 ];
 
-let currentIndex = 0;
+// Thời gian chờ giữa các liên kết (miligiây)
+var delayBetweenLinks = 5000; // Ví dụ: 5000 miligiây = 5 giây
 
-document.addEventListener("click", function () {
-    // Kiểm tra xem sessionStorage có chứa giá trị "popupOpened" là "true" hay không
-    if (!(sessionStorage.getItem("popupOpened") == "true")) {
-        // Mở một tab mới và chuyển hướng đến liên kết tại chỉ số hiện tại của mảng
-        var newTab = window.open('', '_blank');
-        newTab.location.href = linksToOpen[currentIndex];
-
-        // Tăng chỉ số để chuyển đến liên kết tiếp theo trong lần click tiếp theo
-        currentIndex = (currentIndex + 1) % linksToOpen.length;
-
-        // Đánh dấu rằng popup đã được mở
-        markPopupAsOpened();
-    }
-});
+// Gọi hàm để bắt đầu quá trình mở liên kết
+openLinksSequentially(linksToOpen, delayBetweenLinks);
