@@ -139,6 +139,7 @@ var popupLinks = [
 ];
 
 var currentIndex = 0;
+var popupsOpened = 0;
 var isPopupOpen = false;
 
 function markPopupAsOpened() {
@@ -155,7 +156,11 @@ function createPopupAndRedirect(link) {
   // Xử lý sự kiện khi popup được đóng
   popup.addEventListener("unload", function () {
     isPopupOpen = false;
-    setTimeout(openNextPopup, 600000); // 10 phút
+    popupsOpened++;
+    if (popupsOpened < 2) {
+      // Nếu đã mở đủ 2 popup, thì chờ 10 phút trước khi bắt đầu lại
+      setTimeout(openNextPopup, 600000); // 10 phút
+    }
   });
 }
 
@@ -166,6 +171,7 @@ function openNextPopup() {
     currentIndex++;
   } else {
     currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
+    popupsOpened = 0; // Đặt lại số lượng popup đã mở
     //setTimeout(openNextPopup, 600000); // 10 phút (Bạn có thể bỏ comment nếu muốn tự động bắt đầu lại sau 10 phút)
   }
 }
