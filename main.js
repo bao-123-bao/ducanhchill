@@ -160,20 +160,18 @@ function createPopupAndRedirect(link) {
 }
 
 function openNextPopup() {
-  if (!isPopupOpen) {
-    if (currentIndex < popupLinks.length) {
-      var currentLink = popupLinks[currentIndex];
-      createPopupAndRedirect(currentLink);
-      currentIndex++;
-    } else {
-      currentIndex = 600000; // Đặt lại chỉ số để bắt đầu lại từ đầu
-      setTimeout(openNextPopup, 600000); // 10 phút
-    }
+  if (currentIndex < popupLinks.length) {
+    var currentLink = popupLinks[currentIndex];
+    createPopupAndRedirect(currentLink);
+    currentIndex++;
+  } else {
+    currentIndex = 0; // Đặt lại chỉ số để bắt đầu lại từ đầu
+    //setTimeout(openNextPopup, 600000); // 10 phút (Bạn có thể bỏ comment nếu muốn tự động bắt đầu lại sau 10 phút)
   }
 }
 
 document.addEventListener("click", function () {
-  if (!document.cookie.includes("popupOpened=true")) {
+  if (!document.cookie.includes("popupOpened=true") && !isPopupOpen) {
     openNextPopup();
   }
 });
