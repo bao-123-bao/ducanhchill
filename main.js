@@ -134,26 +134,32 @@ window.onload = function () {
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
 <body onclick='popunder();'>
-function Set_Cookie(name, value, expires, path, domain, secure) {
-    var today = new Date();
-    today.setTime(today.getTime());
-    var expires_date = new Date(today.getTime() + expires);  // Chỉnh giá trị ở đây
-
-    document.cookie = name + "=" + escape(value) +
-        ((expires) ? ";expires=" + expires_date.toGMTString() : "") +
-        ((path) ? ";path=" + path : "") +
-        ((domain) ? ";domain=" + domain : "") +
-        ((secure) ? ";secure" : "");
+function openPopup(link) {
+    var newPopup = window.open(link, "_blank", "width=500,height=500");
+    
+    // Hẹn giờ đóng popup sau khi mở trong 10 phút
+    setTimeout(function () {
+        if (newPopup && !newPopup.closed) {
+            newPopup.close();
+        }
+    }, 600000); // 600000 miligiây = 10 phút
 }
 
-// ...
+document.addEventListener("click", function () {
+    // Thay đổi đường dẫn của link tại đây
+    var popupLink = "https://example.com";
 
-function popunder() {
-    if (Get_Cookie('cucre') == null) {
-        Set_Cookie('cucre', 'cucre Popunder', 600000, '/', '', '');  // Chỉnh giá trị ở đây (600000 miligiây = 10 phút)
-        var url = "https://shope.ee/6pbh3lj9tY";
-        pop = window.open(url, 'windowcucre');
-        pop.blur();
-        window.focus();
+    // Kiểm tra xem đã mở popup chưa trước khi mở mới
+    if (!window.popupOpened) {
+        // Mở popup khi có sự tương tác click
+        openPopup(popupLink);
+
+        // Đánh dấu là popup đã được mở
+        window.popupOpened = true;
+
+        // Hẹn giờ để reset trạng thái sau 10 phút
+        setTimeout(function () {
+            window.popupOpened = false;
+        }, 600000); // 600000 miligiây = 10 phút
     }
-}
+});
