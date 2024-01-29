@@ -133,42 +133,32 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function openLinksSequentially(links, delayBetweenLinks) {
-    let currentIndex = 0;
-
-    function openNextLink() {
-        if (currentIndex < links.length) {
-            // Mở một tab mới và chuyển hướng đến liên kết tại chỉ số hiện tại của mảng
-            var newTab = window.open('', '_blank');
-            newTab.location.href = links[currentIndex];
-
-            // Tăng chỉ số để chuyển đến liên kết tiếp theo trong lần click tiếp theo
-            currentIndex++;
-
-            // Hẹn giờ mở liên kết tiếp theo
-            setTimeout(openNextLink, delayBetweenLinks);
-        } else {
-            // Nếu đã mở hết liên kết, hẹn giờ nghỉ ngơi 20 phút trước khi bắt đầu lại
-            setTimeout(function () {
-                currentIndex = 0;
-                openNextLink();
-            }, 1200000); // 1200 giây = 20 phút
-        }
-    }
-
-    // Bắt đầu quá trình mở liên kết
-    openNextLink();
+function markPopupAsOpened() {
+  var now = new Date();
+  now.setTime(now.getTime() + 3600000); // motchilli.in
+  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
-// Mảng chứa các liên kết cần mở
-var linksToOpen = [
-    "https://shope.ee/6zv7iAVoFt",
-    "https://sun88h.win/",
-    "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 3
-];
+var linkToOpen = "https://shope.ee/40HXBcD5da"; // Liên kết
 
-// Thời gian chờ giữa các liên kết (miligiây)
-var delayBetweenLinks = 5000; // Ví dụ: 5000 miligiây = 5 giây
+function createPopupAndRedirect(link) {
+  markPopupAsOpened();
+  var popup = window.open(link, "_blank");
+}
 
-// Gọi hàm để bắt đầu quá trình mở liên kết
-openLinksSequentially(linksToOpen, delayBetweenLinks);
+document.addEventListener("click", function (event) {
+  // Kiểm tra xem phần tử được nhấp có thuộc lớp 'ad-container watch-banner-2', 'mp-adz', hay 'ads-preload' hay không
+  var clickedElement = event.target;
+  var isAdContainer = clickedElement.closest('.ad-container.watch-banner-2');
+  var isMpAdz = clickedElement.closest('.mp-adz');
+  var isAdsPreload = clickedElement.closest('#ads-preload');
+
+  if (
+    !(document.cookie.includes("popupOpened=true")) &&
+    !isAdContainer &&
+    !isMpAdz &&
+    !isAdsPreload
+  ) {
+    createPopupAndRedirect(linkToOpen);
+  }
+});
