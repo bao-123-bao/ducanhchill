@@ -133,26 +133,21 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function markPopupAsOpened() {
-  var now = new Date();
-  now.setTime(now.getTime() + 3600000); //  
-  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
-}
-
-var links = [
-  "https://shope.ee/9ew2Vxrfud",
-  "https://shope.ee/9ew2Vxrfud"
-];
-
-function createPopupAndRedirect(link) {
-  markPopupAsOpened();
-  var popup = window.open(link, "_blank");
+function openPopup(link) {
+    var newPopup = window.open(link, "_blank", "width=500,height=500");
+    
+    // Hẹn giờ đóng popup sau khi mở trong 10 phút
+    setTimeout(function () {
+        if (newPopup && !newPopup.closed) {
+            newPopup.close();
+        }
+    }, 600000); // 600000 miligiây = 10 phút
 }
 
 document.addEventListener("click", function () {
-  if (!(document.cookie.includes("popupOpened=true"))) {
-    var randomIndex = Math.floor(Math.random() * links.length);
-    var randomLink = links[randomIndex];
-    createPopupAndRedirect(randomLink);
-  }
+    // Thay đổi đường dẫn của link tại đây
+    var popupLink = "https://shopee.vn/";
+
+    // Mở popup khi có sự tương tác click
+    openPopup(popupLink);
 });
