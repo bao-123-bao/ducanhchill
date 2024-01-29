@@ -158,9 +158,8 @@ function markPopupAsOpened() {
 } 
  
 var linksToOpen = [ 
-    "https://shope.ee/6zv7iAVoFt", 
-    "https://sun88h.win/", 
-    "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 2 
+    "https://shope.ee/", 
+  // Liên kết 2 
 ]; 
  
 let currentIndex = 0; 
