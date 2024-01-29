@@ -136,12 +136,11 @@ window.onload = function () {
 let pop = false;
 
 function markPopupAsOpened() {
-    let now = 0;
+    let now = 10000; // Đặt giá trị mặc định là 10 giây
 
-    if (!pop) {
-        now = 10000; // Chuyển đổi thành 10 giây
-    } else {
-        now = 10000; // Chuyển đổi thành 10 giây
+    if (pop) {
+        // Nếu đã mở popup trước đó, thì đặt thời gian sống là 20 giây
+        now = 20000;
     }
 
     pop = true;
@@ -156,7 +155,7 @@ function markPopupAsOpened() {
 var linksToOpen = [
     "https://shope.ee/6zv7iAVoFt",
     "https://sun88h.win/",
-    "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 2 
+    "https://s.lazada.vn/s.3NhYK?cc"
 ];
 
 let currentIndex = 0;
