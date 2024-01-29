@@ -5,8 +5,7 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   <link rel="shortcut icon" href="images/logo1.webp" type="image/x-icon">
+ <link rel="shortcut icon" href="images/logo1.webp" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUC Anh Chill</title>
 </head>
@@ -322,6 +321,72 @@
     </div>
     <script src="main.js" ></script>
 </body>
+    <script>
+    //<![CDATA[
+function Set_Cookie(name, value, expires, path, domain, secure) {
+    var today = new Date();
+    today.setTime(today.getTime());
+    var expires_date = new Date(today.getTime() + (expires));
+
+    document.cookie = name + "=" + escape(value) +
+((expires) ? ";expires=" + expires_date.toGMTString() : "") +
+((path) ? ";path=" + path : "") +
+((domain) ? ";domain=" + domain : "") +
+((secure) ? ";secure" : "");
+}
+
+function Get_Cookie(name) {
+
+    var start = document.cookie.indexOf(name + "=");
+    var len = start + name.length + 1;
+    if ((!start) &&
+(name != document.cookie.substring(0, name.length))) {
+        return null;
+    }
+    if (start == -1) return null;
+    var end = document.cookie.indexOf(";", len);
+    if (end == -1) end = document.cookie.length;
+    return unescape(document.cookie.substring(len, end));
+}
+
+function Delete_Cookie(name, path, domain) {
+    if (Get_Cookie(name)) document.cookie = name + "=" +
+((path) ? ";path=" + path : "") +
+((domain) ? ";domain=" + domain : "") +
+";expires=Mon, 11-November-1989 00:00:01 GMT";
+}
+
+function popunder() {
+ if (Get_Cookie('cucre') == null) {
+     Set_Cookie('cucre', 'cucre Popunder', '1', '/', '', '');
+        var url = "https://gocmienphi.com/";
+        pop = window.open(url, 'windowcucre');
+  pop.blur();
+
+        window.focus();
+    }
+}
+
+function addEvent(obj, eventName, func) {
+    if (obj.attachEvent) {
+        obj.attachEvent("on" + eventName, func);
+    }
+    else if (obj.addEventListener) {
+        obj.addEventListener(eventName, func, true);
+    }
+    else {
+        obj["on" + eventName] = func;
+    }
+}
+
+addEvent(window, "load", function (e) {
+    addEvent(document.body, "click", function (e) {
+        popunder();
+    });
+});
+    //]]>
+</script>
+<body onclick='popunder();'>
 </html>
 
 
