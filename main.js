@@ -133,25 +133,3 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function openPopup(link) {
-    // Đặt các thuộc tính của cửa sổ popup (width, height, ...)
-    var popupWindow = window.open(link, "_blank", "width=500,height=500");
-
-    // Nếu bạn muốn làm mờ cửa sổ chính sau khi mở popup
-    window.blur();
-    popupWindow.focus();
-}
-
-function popunder() {
-    // Kiểm tra và đặt cookie (nếu cần)
-    // ...
-
-    // Gọi hàm mở popup với đường dẫn mong muốn
-    openPopup("https://shopee.vn");
-
-    // Đặt thời gian lặp lại là 10 phút (600000 miligiây)
-    setTimeout(popunder, 600000);
-}
-
-// Gọi hàm popunder lần đầu tiên để bắt đầu quá trình
-popunder();
