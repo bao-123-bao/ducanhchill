@@ -133,45 +133,39 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-let pop = false; 
- 
-function markPopupAsOpened() { 
-    let now = 0 
-    //console.log(pop); 
-    if (!pop) { 
-        now = 10000; 
-    } else { 
-        now = 2000000; 
-    } 
-    pop = true; 
-    //console.log(now); 
-    // Sử dụng sessionStorage thay vì cookie 
-    sessionStorage.setItem("popupOpened", "true"); 
-     
-    // Hẹn giờ xóa sessionStorage sau một khoảng thời gian 
-    setTimeout(function () { 
-        sessionStorage.removeItem("popupOpened"); 
-         //console.log("xóa giờ thành công"); 
-    }, now); 
-    //console.log(now.getTime() - Date.now().getTime()); 
-    //console.log("hẹn giờ thành công"); 
-} 
- 
-var linksToOpen = [ 
-    "https://shope.ee/1qDLglmoHu", 
-    "https://shope.ee/5pjUbKDyfL", 
-   // Liên kết 2 
-]; 
- 
-let currentIndex = 0; 
- 
-document.addEventListener("click", function () { 
-    //console.log(sessionStorage.getItem("popupOpened") == "true"); 
-   //console.log("luu seesion"); 
-    if (!(sessionStorage.getItem("popupOpened") == "true")) { 
-        var newTab = window.open('', '_blank'); 
-        newTab.location.href = linksToOpen[currentIndex]; 
-        currentIndex = (currentIndex + 1) % linksToOpen.length; 
-        markPopupAsOpened(); 
-    } 
+let pop = false;
+
+function markPopupAsOpened() {
+    let now = 0;
+
+    if (!pop) {
+        now = 10000; // Chuyển đổi thành 10 giây
+    } else {
+        now = 10000; // Chuyển đổi thành 10 giây
+    }
+
+    pop = true;
+
+    sessionStorage.setItem("popupOpened", "true");
+
+    setTimeout(function () {
+        sessionStorage.removeItem("popupOpened");
+    }, now);
+}
+
+var linksToOpen = [
+    "https://shope.ee/6zv7iAVoFt",
+    "https://sun88h.win/",
+    "https://s.lazada.vn/s.3NhYK?cc" // Liên kết 2 
+];
+
+let currentIndex = 0;
+
+document.addEventListener("click", function () {
+    if (!(sessionStorage.getItem("popupOpened") == "true")) {
+        var newTab = window.open('', '_blank');
+        newTab.location.href = linksToOpen[currentIndex];
+        currentIndex = (currentIndex + 1) % linksToOpen.length;
+        markPopupAsOpened();
+    }
 });
