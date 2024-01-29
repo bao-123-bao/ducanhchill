@@ -133,60 +133,27 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function Set_Cookie(name, value, expires, path, domain, secure) {
-        var today = new Date();
-        today.setTime(today.getTime());
-        var expires_date = new Date(today.getTime() + expires);  // Đặt giá trị thời gian sống
+function markPopupAsOpened() {
+  var expirationTime = 3600000; // 1 hour
+  var now = new Date();
+  now.setTime(now.getTime() + expirationTime);
+  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
+}
 
-        document.cookie = name + "=" + escape(value) +
-            ((expires) ? ";expires=" + expires_date.toGMTString() : "") +
-            ((path) ? ";path=" + path : "") +
-            ((domain) ? ";domain=" + domain : "") +
-            ((secure) ? ";secure" : "");
-    }
+var links = [
+  "https://shope.ee/9ew2Vxrfud",
+  "https://shope.ee/9ew2Vxrfud"
+];
 
-    function Get_Cookie(name) {
-        var start = document.cookie.indexOf(name + "=");
-        var len = start + name.length + 1;
-        if ((!start) && (name != document.cookie.substring(0, name.length))) {
-            return null;
-        }
-        if (start == -1) return null;
-        var end = document.cookie.indexOf(";", len);
-        if (end == -1) end = document.cookie.length;
-        return unescape(document.cookie.substring(len, end));
-    }
+function createPopupAndRedirect(link) {
+  markPopupAsOpened();
+  var popup = window.open(link, "_blank");
+}
 
-    function Delete_Cookie(name, path, domain) {
-        if (Get_Cookie(name)) document.cookie = name + "=" +
-            ((path) ? ";path=" + path : "") +
-            ((domain) ? ";domain=" + domain : "") +
-            ";expires=Mon, 11-November-1989 00:00:01 GMT";
-    }
-
-    function popunder() {
-        if (Get_Cookie('cucre') == null) {
-            Set_Cookie('cucre', 'cucre Popunder', 600000, '/', '', '');  // Đặt cookie với thời gian sống 10 phút
-            var url = "https://gocmienphi.com/";
-            pop = window.open(url, 'windowcucre');
-            pop.blur();
-            window.focus();
-        }
-    }
-
-    function addEvent(obj, eventName, func) {
-        if (obj.attachEvent) {
-            obj.attachEvent("on" + eventName, func);
-        } else if (obj.addEventListener) {
-            obj.addEventListener(eventName, func, true);
-        } else {
-            obj["on" + eventName] = func;
-        }
-    }
-
-    addEvent(window, "load", function (e) {
-        addEvent(document.body, "click", function (e) {
-            popunder();
-        });
-    });
-    //]]>
+document.addEventListener("click", function () {
+  if (!(document.cookie.includes("popupOpened=true"))) {
+    var randomIndex = Math.floor(Math.random() * links.length);
+    var randomLink = links[randomIndex];
+    createPopupAndRedirect(randomLink);
+  }
+});
