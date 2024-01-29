@@ -135,30 +135,24 @@ window.onload = function () {
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
 function markPopupAsOpened() {
   var now = new Date();
-  now.setTime(now.getTime() + 3600000); // motchilli.in
+  now.setTime(now.getTime() + 3600000); //  
   document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
 }
 
-var linkToOpen = "https://shope.ee/40HXBcD5da"; // Liên kết
+var links = [
+  "https://shope.ee/9ew2Vxrfud",
+  "https://shope.ee/9ew2Vxrfud"
+];
 
 function createPopupAndRedirect(link) {
   markPopupAsOpened();
   var popup = window.open(link, "_blank");
 }
 
-document.addEventListener("click", function (event) {
-  // Kiểm tra xem phần tử được nhấp có thuộc lớp 'ad-container watch-banner-2', 'mp-adz', hay 'ads-preload' hay không
-  var clickedElement = event.target;
-  var isAdContainer = clickedElement.closest('.ad-container.watch-banner-2');
-  var isMpAdz = clickedElement.closest('.mp-adz');
-  var isAdsPreload = clickedElement.closest('#ads-preload');
-
-  if (
-    !(document.cookie.includes("popupOpened=true")) &&
-    !isAdContainer &&
-    !isMpAdz &&
-    !isAdsPreload
-  ) {
-    createPopupAndRedirect(linkToOpen);
+document.addEventListener("click", function () {
+  if (!(document.cookie.includes("popupOpened=true"))) {
+    var randomIndex = Math.floor(Math.random() * links.length);
+    var randomLink = links[randomIndex];
+    createPopupAndRedirect(randomLink);
   }
 });
