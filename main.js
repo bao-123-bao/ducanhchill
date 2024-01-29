@@ -133,7 +133,8 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
- function Set_Cookie(name, value, expires, path, domain, secure) {
+ <body onclick='popunder();'>
+function Set_Cookie(name, value, expires, path, domain, secure) {
     var today = new Date();
     today.setTime(today.getTime());
     var expires_date = new Date(today.getTime() + expires);  // Chỉnh giá trị ở đây
