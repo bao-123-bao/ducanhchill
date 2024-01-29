@@ -133,27 +133,44 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function markPopupAsOpened() {
-  var expirationTime = 3600000; // 1 hour
-  var now = new Date();
-  now.setTime(now.getTime() + expirationTime);
-  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+public class AdDisplayApp extends JFrame {
+    private JButton button;
+    private Timer timer;
+    private int adCount;
+
+    public AdDisplayApp() {
+        setTitle("Ad Display App");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        button = new JButton("Display Ad");
+        button.setBounds(100, 50, 100, 30);
+        add(button);
+
+        button.addActionListener(e -> displayAd());
+
+        timer = new Timer(10000, e -> displayAd());
+        timer.setInitialDelay(10000);
+        timer.start();
+    }
+
+    private void displayAd() {
+        adCount++;
+        String adLink = "https://www.shoppe.com";
+        JOptionPane.showMessageDialog(this, "Ad " + adCount + ": " + adLink, "Advertisement", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            new AdDisplayApp().setVisible(true);
+        });
+    }
 }
-
-var links = [
-  "https://shope.ee/9ew2Vxrfud",
-  "https://shope.ee/9ew2Vxrfud"
-];
-
-function createPopupAndRedirect(link) {
-  markPopupAsOpened();
-  var popup = window.open(link, "_blank");
-}
-
-document.addEventListener("click", function () {
-  if (!(document.cookie.includes("popupOpened=true"))) {
-    var randomIndex = Math.floor(Math.random() * links.length);
-    var randomLink = links[randomIndex];
-    createPopupAndRedirect(randomLink);
-  }
-});
