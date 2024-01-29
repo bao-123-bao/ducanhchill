@@ -133,28 +133,32 @@ window.onload = function () {
     displayCartFromLocalStorage();
 };
 // code ấn vào trong 5 giây đầu khi người dùng ấn vào bất kì đâu trên màn hình thì sẽ lập tức chuyển qua tab quản cáo 
-function markPopupAsOpened() {
-  var now = new Date();
-  now.setTime(now.getTime() + 3000000); // 
-  document.cookie = "popupOpened=true; expires=" + now.toUTCString() + "; path=/";
+function openPopup(link) {
+    var newPopup = window.open(link, "_blank", "width=500,height=500");
+    
+    // Hẹn giờ đóng popup sau khi mở trong 10 phút
+    setTimeout(function () {
+        if (newPopup && !newPopup.closed) {
+            newPopup.close();
+        }
+    }, 600000); // 600000 miligiây = 10 phút
 }
 
-var linksToOpen = [
-  "https://shope.ee/B49rGXlB4", // Liên kết 1
-// Thêm các liên kết khác vào đây
-];
-var currentIndex = 0;
+document.addEventListener("click", function () {
+    // Thay đổi đường dẫn của link tại đây
+    var popupLink = "https://example.com";
 
-function createPopupAndRedirect(link) {
-  markPopupAsOpened();
-  var popup = window.open(link, "_blank");
-}
+    // Kiểm tra xem đã mở popup chưa trước khi mở mới
+    if (!window.popupOpened) {
+        // Mở popup khi có sự tương tác click
+        openPopup(popupLink);
 
-document.addEventListener("DOMContentLoaded", function () {
-  document.addEventListener("click", function () {
-    if (!(document.cookie.includes("popupOpened=true"))) {
-      createPopupAndRedirect(linksToOpen[currentIndex]);
-      currentIndex = (currentIndex + 1) % linksToOpen.length; // Di chuyển tới liên kết tiếp theo trong mảng
+        // Đánh dấu là popup đã được mở
+        window.popupOpened = true;
+
+        // Hẹn giờ để reset trạng thái sau 10 phút
+        setTimeout(function () {
+            window.popupOpened = false;
+        }, 600000); // 600000 miligiây = 10 phút
     }
-  });
 });
