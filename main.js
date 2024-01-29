@@ -158,8 +158,9 @@ function markPopupAsOpened() {
 } 
  
 var linksToOpen = [ 
-    "https://shope.ee/", 
-  // Liên kết 2 
+    "https://shope.ee/1qDLglmoHu", 
+    "https://shope.ee/5pjUbKDyfL", 
+   // Liên kết 2 
 ]; 
  
 let currentIndex = 0; 
